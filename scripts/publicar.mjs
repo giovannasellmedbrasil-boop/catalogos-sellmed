@@ -7,7 +7,8 @@
 //   node scripts/publicar.mjs banco
 //       Grava no Supabase (DATABASE_URL) o que está em catalogos/catalogos.json. Rode DEPOIS do deploy
 //       na Vercel, para os links já existirem. Não sobrescreve nome/descrição editados no painel:
-//       só atualiza o arquivo quando ele mudou.
+//       só atualiza o arquivo quando ele mudou. Com SUPABASE_URL e SUPABASE_SECRET_KEY, também envia
+//       uma cópia de cada PDF e capa para o Storage do Supabase (bucket "catalogos", mesmos nomes).
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -53,6 +54,21 @@ async function importar(base, only) {
   save(list);
 }
 
+// Cópia no Storage do Supabase (não reenvia o que já está lá: os nomes têm hash do conteúdo)
+async function espelhar(path) {
+  const base = (process.env.SUPABASE_URL || '').replace(/\/$/, ''), key = process.env.SUPABASE_SECRET_KEY;
+  if (!base || !key) return 'sem chave';
+  const pub = `${base}/storage/v1/object/public/catalogos/${path}`;
+  if ((await fetch(pub, { method: 'HEAD' })).ok) return 'já no Storage';
+  const r = await fetch(`${base}/storage/v1/object/catalogos/${path}`, {
+    method: 'POST',
+    headers: { apikey: key, Authorization: `Bearer ${key}`, 'x-upsert': 'true', 'Content-Type': path.endsWith('.pdf') ? 'application/pdf' : 'image/jpeg' },
+    body: readFileSync(join(dir, path)),
+  });
+  if (!r.ok) throw new Error(`Storage ${path}: ${r.status} ${await r.text()}`);
+  return 'enviado ao Storage';
+}
+
 async function banco() {
   const { default: pg } = await import('pg');
   const c = new pg.Client({ connectionString: process.env.DATABASE_URL, ssl: process.env.DATABASE_SSL === 'off' ? false : { rejectUnauthorized: false } });
@@ -61,6 +77,7 @@ async function banco() {
     const url = `/catalogos/${it.arquivo}`;
     const coverUrl = it.capa ? `/catalogos/${it.capa}` : null;
     const size = readFileSync(join(dir, it.arquivo)).length;
+    for (const f of [it.arquivo, it.capa].filter(Boolean)) console.log(' ', f, '→', await espelhar(f));
     const { rows } = await c.query('select url from public.catalogos where slug = $1', [it.slug]);
     if (!rows.length) {
       await c.query(

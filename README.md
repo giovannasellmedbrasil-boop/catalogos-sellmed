@@ -28,7 +28,9 @@ A página pública pode levar até ~15 segundos para mostrar uma alteração.
 Desde 09/11/2026 todo catálogo novo ou substituído vai para os três:
 - **Git:** o PDF e a capa ficam em `catalogos/arquivos/` e `catalogos/capas/`, e a lista em `catalogos/catalogos.json`.
 - **Vercel:** publica essa pasta. Os PDFs são servidos em `/catalogos/arquivos/…`.
-- **Supabase:** a tabela `catalogos` guarda o que aparece no site.
+- **Supabase:** a tabela `catalogos` guarda o que aparece no site, e o Storage (bucket `catalogos`)
+  guarda uma cópia de cada PDF e capa, com os mesmos nomes. O `banco` envia essa cópia quando recebe
+  `SUPABASE_URL` e `SUPABASE_SECRET_KEY`.
 
 Os arquivos levam um hash no nome, então um PDF substituído ganha um endereço novo, sem cache antigo.
 Os links fixos `/c/<produto>` continuam os mesmos.
@@ -38,7 +40,7 @@ Passo a passo depois de subir um catálogo pelo painel (produção ou prévia lo
 node scripts/publicar.mjs importar <url-do-site> [slug,slug]   # baixa para catalogos/
 git add catalogos && git commit -m "Catálogos: …" && git push
 npx vercel@latest deploy --prod --yes --scope sellmed-brasil
-DATABASE_URL=… node scripts/publicar.mjs banco                  # grava no Supabase
+DATABASE_URL=… SUPABASE_URL=… SUPABASE_SECRET_KEY=… node scripts/publicar.mjs banco   # tabela + Storage
 ```
 Para remover um catálogo de vez, tire-o do `catalogos.json` e da pasta, além de remover no painel.
 Se não fizer isso, o próximo `banco` o recoloca no site.
