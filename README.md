@@ -6,7 +6,12 @@ Plataforma com o catálogo consolidado e o catálogo individual de cada produto,
   fabricante, e em cada produto: ver, baixar e copiar link.
 - `admin.html` — painel com senha: enviar, editar, substituir e remover catálogos.
 
-**Status:** pronta e testada localmente; ainda não publicada.
+- **Página pública:** https://catalogos-sellmed.vercel.app
+- **Painel:** https://catalogos-sellmed.vercel.app/admin.html
+
+**Status:** publicada na Vercel (time `sellmed-brasil`, projeto `catalogos-sellmed`). Banco: Supabase
+`jlfzuibanroexvnwyeti`, com `schema.sql` aplicado. Falta a variável `SUPABASE_SECRET_KEY` na Vercel:
+sem ela o envio de PDFs não funciona e o conteúdo inicial (`npm run seed`) não foi enviado.
 
 ## Como usar o painel
 1. Entre com a senha de administrador.
@@ -35,6 +40,7 @@ produção, com banco embutido e arquivos em `.local/`. Nada sai do computador.
 
 ## Publicar pela primeira vez
 Mesmo modelo do Portal de Políticas: Vercel (hospedagem e funções) + Supabase (tabela e arquivos).
+Passos 1, 2 (menos `SUPABASE_SECRET_KEY`) e 4 já feitos em 09/11/2026.
 1. Rodar `supabase/schema.sql` no projeto Supabase. Cria a tabela `catalogos` e o bucket `catalogos`.
 2. Criar o projeto `catalogos-sellmed` na Vercel (time `sellmed-brasil`) com as variáveis
    `DATABASE_URL`, `SUPABASE_URL`, `SUPABASE_SECRET_KEY` e `ADMIN_PASSWORD`.
