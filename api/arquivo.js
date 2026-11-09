@@ -7,7 +7,10 @@ export default async function handler(req, res) {
   try {
     const p = /^[a-z0-9-]{1,90}$/.test(slug || '') ? await getBySlug(slug) : null;
     if (!p) return res.status(404).send('Catálogo não encontrado. Acesse a página de catálogos para ver a lista atual.');
-    const url = baixar ? `${p.url}?download=${encodeURIComponent(p.fileName || 'catalogo.pdf')}` : p.url;
+    // PDFs do Git ficam na própria Vercel (/catalogos/arquivos/…); os enviados pelo painel ficam no Supabase Storage
+    const url = !baixar ? p.url
+      : p.url.startsWith('/catalogos/arquivos/') ? p.url.replace('/catalogos/arquivos/', '/catalogos/baixar/')
+      : `${p.url}?download=${encodeURIComponent(p.fileName || 'catalogo.pdf')}`;
     res.setHeader('Cache-Control', 'no-store');
     res.redirect(302, url);
   } catch (e) {

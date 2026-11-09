@@ -1,4 +1,12 @@
 {
   "cleanUrls": false,
-  "rewrites": [{ "source": "/c/:slug", "destination": "/api/arquivo?slug=:slug" }]
+  "rewrites": [
+    { "source": "/c/:slug", "destination": "/api/arquivo?slug=:slug" },
+    { "source": "/catalogos/baixar/:file", "destination": "/catalogos/arquivos/:file" }
+  ],
+  "headers": [
+    { "source": "/catalogos/baixar/:file", "headers": [{ "key": "Content-Disposition", "value": "attachment" }] },
+    { "source": "/catalogos/(arquivos|capas)/:file", "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }] },
+    { "source": "/catalogos/catalogos.json", "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }] }
+  ]
 }

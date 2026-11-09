@@ -1,0 +1,47 @@
+[
+ {
+  "slug": "consolidado",
+  "kind": "consolidado",
+  "name": "Catálogo Sellmed Brasil",
+  "description": "Todo o portfólio em um único documento, organizado por área e linha.",
+  "area": "",
+  "line": "",
+  "manufacturer": "",
+  "version": "",
+  "sortOrder": 0,
+  "fileName": "Catalogo Sellmed Brasil.pdf",
+  "pages": 69,
+  "arquivo": "arquivos/consolidado-efaca200.pdf",
+  "capa": "capas/consolidado-74fe4fce.jpg"
+ },
+ {
+  "slug": "vesselin",
+  "kind": "produto",
+  "name": "Vesselin®",
+  "description": "Balão coronário farmacológico com paclitaxel",
+  "area": "Cardiologia Intervencionista",
+  "line": "Linha Coronária",
+  "manufacturer": "LEPU Medical",
+  "version": "",
+  "sortOrder": 10,
+  "fileName": "Vesselin.pdf",
+  "pages": 2,
+  "arquivo": "arquivos/vesselin-6c880ac9.pdf",
+  "capa": "capas/vesselin-b2fd1c18.jpg"
+ },
+ {
+  "slug": "vesscide",
+  "kind": "produto",
+  "name": "Vesscide®",
+  "description": "Sistema de balão de corte",
+  "area": "Cardiologia Intervencionista",
+  "line": "Linha Coronária",
+  "manufacturer": "LEPU Medical",
+  "version": "",
+  "sortOrder": 20,
+  "fileName": "Vesscide_Cutting_Balloon_SELLMED_BRASIL_LEPU_MEDICAL.pdf",
+  "pages": 2,
+  "arquivo": "arquivos/vesscide-976ef4bf.pdf",
+  "capa": "capas/vesscide-06383e54.jpg"
+ }
+]
