@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catálogos de Produtos · Sellmed Brasil</title>
+<meta name="description" content="Catálogo consolidado e catálogos individuais dos produtos da Sellmed Brasil.">
+<meta name="theme-color" content="#0C2F79">
+<link rel="icon" href="assets/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0C2F79; --teal:#1EA4A8; --green:#73CC6E;
+    --teal-soft:#EAF6F6; --navy-soft:#EDF1FA;
+    --bg:#FAFBFB; --surface:#FFFFFF; --border:#E2E8EC; --hover:#F2F6F8;
+    --ink:#1D2939; --text:#5B6772; --muted:#858683;
+    --grad:linear-gradient(90deg,#0C2F79 0%,#1EA4A8 50%,#73CC6E 100%);
+    color-scheme:light;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);font-family:'Inter',Arial,sans-serif;color:var(--text);font-size:14.5px;}
+  h1,h2,h3,h4{font-family:'Montserrat',Arial,sans-serif;}
+  .accent-bar{height:5px;background:var(--grad);}
+  header.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 32px;}
+  header.topbar .in{max-width:1176px;margin:0 auto;display:flex;align-items:center;gap:18px;}
+  header.topbar img{height:48px;width:auto;display:block;}
+  header.topbar .sep{width:1px;height:34px;background:var(--border);}
+  header.topbar h1{margin:0;font-size:19px;font-weight:800;color:var(--navy);}
+  header.topbar p{margin:2px 0 0;font-size:11.5px;color:var(--muted);font-weight:600;letter-spacing:.4px;text-transform:uppercase;}
+
+  .hero{background:var(--navy);color:#fff;padding:44px 32px 84px;position:relative;overflow:hidden;}
+  .hero::after{content:"";position:absolute;inset:auto 0 0 0;height:4px;background:var(--grad);}
+  .hero .in{max-width:1176px;margin:0 auto;display:grid;grid-template-columns:1fr auto;gap:48px;align-items:center;}
+  .hero .kicker{font:700 12px 'Montserrat',sans-serif;letter-spacing:1.4px;text-transform:uppercase;color:var(--green);margin:0 0 10px;}
+  .hero h2{margin:0 0 10px;font-size:32px;font-weight:800;letter-spacing:-.3px;line-height:1.18;}
+  .hero .lead{margin:0;max-width:600px;color:#C9D5EE;font-size:15.5px;line-height:1.55;}
+  .hero .meta{margin:14px 0 0;color:#AEBEE0;font-size:13px;display:flex;gap:6px 14px;flex-wrap:wrap;}
+  .hero .acts{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap;}
+  .hero .cover{display:block;width:196px;border-radius:8px;overflow:hidden;box-shadow:0 18px 44px rgba(0,0,0,.38);background:#fff;transition:transform .18s;margin-bottom:-14px;}
+  .hero .cover:hover{transform:translateY(-4px);}
+  .hero .cover img{display:block;width:100%;height:auto;aspect-ratio:790/1117;object-fit:cover;}
+
+  .btn{border:1px solid transparent;border-radius:8px;padding:10px 16px;font-family:'Inter',sans-serif;font-weight:600;font-size:13.5px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px;text-decoration:none;white-space:nowrap;background:none;}
+  .btn:focus-visible,.icon:focus-visible,.chip:focus-visible,.thumb:focus-visible,.cover:focus-visible{outline:2px solid var(--teal);outline-offset:2px;}
+  .btn-white{background:#fff;color:var(--navy);} .btn-white:hover{background:var(--teal-soft);}
+  .btn-line{border-color:rgba(255,255,255,.4);color:#fff;} .btn-line:hover{background:rgba(255,255,255,.1);}
+  .btn-primary{background:var(--navy);color:#fff;flex:1;padding:8px 10px;font-size:13px;} .btn-primary:hover{filter:brightness(1.18);}
+  .icon{flex:none;width:36px;height:36px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--navy);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0;}
+  .icon:hover{background:var(--hover);}
+
+  main{max-width:1240px;margin:-44px auto 0;padding:0 32px 72px;position:relative;}
+  .searchbox{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:0 8px 28px rgba(12,47,121,.10);padding:16px;display:flex;flex-direction:column;gap:12px;}
+  .row{display:flex;gap:10px;}
+  .search{position:relative;flex:1;}
+  .search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);}
+  .search input,select{width:100%;border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:15px;font-family:inherit;color:var(--ink);background:var(--bg);}
+  .search input{padding-left:42px;}
+  select{width:220px;font-size:14px;cursor:pointer;}
+  .search input:focus,select:focus{outline:2px solid var(--teal);outline-offset:1px;background:#fff;}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;}
+  .chip{border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:999px;padding:6px 13px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;}
+  .chip:hover{border-color:var(--teal);color:var(--navy);}
+  .chip.active{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .chip .n{opacity:.6;margin-left:4px;font-weight:500;}
+  .chips.sub .chip{padding:4px 11px;font-size:12px;}
+  .chips.sub .chip.active{background:var(--teal);border-color:var(--teal);}
+
+  .area{margin-top:38px;}
+  .area>h3{margin:0;font-size:20px;font-weight:800;color:var(--navy);display:flex;align-items:baseline;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--border);position:relative;}
+  .area>h3::after{content:"";position:absolute;left:0;bottom:-1px;width:86px;height:3px;background:var(--grad);border-radius:2px;}
+  .area>h3 small{font:500 13px 'Inter',sans-serif;color:var(--muted);white-space:nowrap;}
+  .line{margin-top:22px;}
+  .line h4{margin:0 0 12px;font-size:12.5px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.7px;}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px;}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s,border-color .15s,transform .15s;}
+  .card:hover{border-color:#C9E6E7;box-shadow:0 8px 24px rgba(12,47,121,.10);transform:translateY(-2px);}
+  .thumb{display:block;aspect-ratio:1/.92;overflow:hidden;background:var(--teal-soft);border-bottom:1px solid var(--border);}
+  .thumb img{display:block;width:100%;height:auto;}
+  .thumb .none{height:100%;display:flex;align-items:center;justify-content:center;}
+  .thumb .none img{width:56%;opacity:.8;}
+  .info{padding:13px 14px 14px;display:flex;flex-direction:column;flex:1;}
+  .mfr{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;}
+  .info h5{margin:4px 0 0;font:700 15.5px/1.3 'Montserrat',sans-serif;color:var(--navy);}
+  .info p{margin:5px 0 0;font-size:13px;line-height:1.45;color:var(--text);}
+  .info .acts{margin-top:auto;padding-top:13px;display:flex;gap:7px;}
+  mark{background:#DDF3E0;color:inherit;border-radius:3px;padding:0 1px;}
+
+  .empty{margin-top:30px;text-align:center;padding:48px 20px;border:1px dashed var(--border);border-radius:14px;background:var(--surface);color:var(--muted);}
+  .empty b{display:block;color:var(--navy);font-family:'Montserrat',sans-serif;font-size:15px;margin-bottom:6px;}
+  .skeleton{height:320px;border-radius:12px;background:linear-gradient(90deg,#EEF2F4 0%,#F6F8F9 50%,#EEF2F4 100%);background-size:200% 100%;animation:sh 1.2s infinite;}
+  @keyframes sh{to{background-position:-200% 0;}}
+
+  footer.foot{border-top:1px solid var(--border);background:var(--surface);padding:20px 32px;font-size:12.5px;color:var(--muted);}
+  footer.foot .in{max-width:1176px;margin:0 auto;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  footer.foot .spacer{flex:1;}
+  footer.foot a{color:var(--muted);}
+  #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:11px 18px;border-radius:9px;font-size:13.5px;font-weight:500;z-index:200;display:none;box-shadow:0 8px 24px rgba(0,0,0,.2);}
+
+  @media (max-width:760px){
+    header.topbar{padding:12px 18px;} header.topbar .in{gap:12px;} header.topbar img{height:38px;} header.topbar .sep{display:none;}
+    header.topbar h1{font-size:16px;}
+    .hero{padding:28px 18px 76px;} .hero h2{font-size:24px;} .hero .in{grid-template-columns:1fr;gap:0;}
+    .hero .cover{display:none;}
+    main{padding:0 14px 50px;} .row{flex-direction:column;} select{width:100%;}
+    .chips{flex-wrap:nowrap;overflow-x:auto;margin:0 -16px;padding:0 16px 2px;scrollbar-width:none;} .chip{flex:none;}
+    .area>h3{font-size:18px;}
+    .cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+    .info{padding:10px;} .info h5{font-size:14px;} .btn-primary{font-size:12.5px;padding:8px 6px;}
+    .icon{width:34px;height:34px;}
+    footer.foot{padding:18px;}
+  }
+</style>
+</head>
+<body>
+<div class="accent-bar"></div>
+<header class="topbar">
+  <div class="in">
+    <img src="assets/logo.svg" alt="Sellmed Brasil">
+    <div class="sep"></div>
+    <div>
+      <h1>Catálogos de Produtos</h1>
+      <p>Sellmed Brasil · Produtos que salvam vidas</p>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="in" id="hero">
+    <div>
+      <p class="kicker">Catálogo consolidado</p>
+      <h2>Todo o portfólio Sellmed em um só lugar</h2>
+      <p class="lead">Consulte o catálogo completo ou encontre o catálogo individual de cada produto.</p>
+    </div>
+  </div>
+</section>
+
+<main>
+  <div class="searchbox">
+    <div class="row">
+      <label class="search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="Buscar por produto, tipo, linha ou fabricante…" autocomplete="off" aria-label="Buscar catálogo">
+      </label>
+      <select id="mfr" aria-label="Filtrar por fabricante"></select>
+    </div>
+    <div class="chips" id="chips"></div>
+    <div class="chips sub" id="subchips"></div>
+  </div>
+  <div id="list">
+    <div class="area"><div class="cards"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div></div>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="in">
+    <span>© <span id="yr"></span> Sellmed Brasil</span>
+    <span class="spacer"></span>
+    <a href="admin.html">Área do administrador</a>
+  </div>
+</footer>
+<div id="toast" role="status"></div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+const fmtDate = (iso) => iso ? new Date(iso).toLocaleDateString('pt-BR') : '';
+const fmtSize = (b) => !b ? '' : b < 1048576 ? Math.max(1, Math.round(b / 1024)) + ' KB' : (b / 1048576).toFixed(1).replace('.', ',') + ' MB';
+const I = {
+  down: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>',
+  link: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3A4 4 0 0 0 11 18.700l1-1"/></svg>',
+};
+
+let PRODUCTS = [], AREA = '', LINE = '', MFR = '';
+$('#yr').textContent = new Date().getFullYear();
+
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.style.display = 'block'; clearTimeout(toast._t); toast._t = setTimeout(() => t.style.display = 'none', 2600); }
+
+async function copyLink(slug) {
+  const url = `${location.origin}/c/${slug}`;
+  try { await navigator.clipboard.writeText(url); toast('Link copiado'); }
+  catch { prompt('Copie o link:', url); }
+}
+
+function highlight(text, q) {
+  const t = esc(text);
+  if (!q) return t;
+  const i = norm(text).indexOf(q);
+  if (i < 0) return t;
+  return esc(text.slice(0, i)) + '<mark>' + esc(text.slice(i, i + q.length)) + '</mark>' + esc(text.slice(i + q.length));
+}
+
+function renderHero(c) {
+  if (!c) return;
+  const meta = [c.version && 'Versão ' + c.version, c.pages && c.pages + ' páginas', fmtSize(c.size), c.updatedAt && 'Atualizado em ' + fmtDate(c.updatedAt)].filter(Boolean);
+  $('#hero').innerHTML = `
+    <div>
+      <p class="kicker">Catálogo consolidado</p>
+      <h2>${esc(c.name)}</h2>
+      <p class="lead">${esc(c.description)}</p>
+      <p class="meta">${meta.map((m) => `<span>${esc(m)}</span>`).join('')}</p>
+      <div class="acts">
+        <a class="btn btn-white" href="/c/${esc(c.slug)}" target="_blank" rel="noopener">Ver catálogo completo</a>
+        <a class="btn btn-line" href="/api/arquivo?slug=${esc(c.slug)}&baixar=1">${I.down} Baixar PDF</a>
+        <button class="btn btn-line" data-copy="${esc(c.slug)}">${I.link} Copiar link</button>
+      </div>
+    </div>
+    ${c.coverUrl ? `<a class="cover" href="/c/${esc(c.slug)}" target="_blank" rel="noopener" aria-label="Abrir ${esc(c.name)}"><img src="${esc(c.coverUrl)}" alt="Capa do ${esc(c.name)}"></a>` : ''}`;
+}
+
+const count = (arr, key) => arr.reduce((o, p) => (p[key] && (o[p[key]] = (o[p[key]] || 0) + 1), o), {});
+const chip = (val, cur, label, n, attr) => `<button class="chip ${cur === val ? 'active' : ''}" data-${attr}="${esc(val)}">${esc(label)}<span class="n">${n}</span></button>`;
+
+function card(p, q) {
+  const url = `/c/${esc(p.slug)}`;
+  return `
+    <article class="card">
+      <a class="thumb" href="${url}" target="_blank" rel="noopener" aria-label="Abrir catálogo ${esc(p.name)}">${p.coverUrl
+        ? `<img src="${esc(p.coverUrl)}" alt="" loading="lazy">`
+        : '<span class="none"><img src="assets/logo.svg" alt=""></span>'}</a>
+      <div class="info">
+        ${p.manufacturer ? `<span class="mfr">${highlight(p.manufacturer, q)}</span>` : ''}
+        <h5>${highlight(p.name, q)}</h5>
+        ${p.description ? `<p>${highlight(p.description, q)}</p>` : ''}
+        <div class="acts">
+          <a class="btn btn-primary" href="${url}" target="_blank" rel="noopener">Ver catálogo</a>
+          <a class="icon" href="/api/arquivo?slug=${esc(p.slug)}&baixar=1" title="Baixar PDF${p.size ? ' · ' + esc(fmtSize(p.size)) : ''}" aria-label="Baixar PDF de ${esc(p.name)}">${I.down}</a>
+          <button class="icon" data-copy="${esc(p.slug)}" title="Copiar link" aria-label="Copiar link de ${esc(p.name)}">${I.link}</button>
+        </div>
+      </div>
+    </article>`;
+}
+
+function render() {
+  const q = norm($('#q').value.trim());
+  const areas = count(PRODUCTS, 'area');
+  $('#chips').innerHTML = Object.keys(areas).length < 2 ? '' :
+    chip('', AREA, 'Todas as áreas', PRODUCTS.length, 'area') + Object.keys(areas).map((a) => chip(a, AREA, a, areas[a], 'area')).join('');
+
+  const lines = AREA ? count(PRODUCTS.filter((p) => p.area === AREA), 'line') : {};
+  $('#subchips').innerHTML = Object.keys(lines).length < 2 ? '' :
+    chip('', LINE, 'Todas as linhas', Object.values(lines).reduce((a, b) => a + b, 0), 'line') + Object.keys(lines).map((l) => chip(l, LINE, l, lines[l], 'line')).join('');
+
+  const shown = PRODUCTS.filter((p) => (!AREA || p.area === AREA) && (!LINE || p.line === LINE) && (!MFR || p.manufacturer === MFR) &&
+    (!q || norm([p.name, p.description, p.area, p.line, p.manufacturer].join(' ')).includes(q)));
+
+  if (!PRODUCTS.length) { $('#list').innerHTML = '<div class="empty"><b>Nenhum catálogo de produto publicado ainda</b>Os catálogos aparecerão aqui assim que forem adicionados.</div>'; return; }
+  if (!shown.length) { $('#list').innerHTML = '<div class="empty"><b>Nenhum catálogo encontrado</b>Tente outro termo de busca ou limpe os filtros.</div>'; return; }
+
+  const groups = new Map();
+  shown.forEach((p) => {
+    if (!groups.has(p.area)) groups.set(p.area, new Map());
+    const g = groups.get(p.area);
+    if (!g.has(p.line)) g.set(p.line, []);
+    g.get(p.line).push(p);
+  });
+  $('#list').innerHTML = [...groups].map(([area, ls]) => {
+    const n = [...ls.values()].reduce((a, l) => a + l.length, 0);
+    return `<section class="area">
+      <h3>${esc(area)} <small>${n} ${n === 1 ? 'catálogo' : 'catálogos'}</small></h3>
+      ${[...ls].map(([line, ps]) => `<div class="line">${line ? `<h4>${esc(line)}</h4>` : ''}<div class="cards">${ps.map((p) => card(p, q)).join('')}</div></div>`).join('')}
+    </section>`;
+  }).join('');
+}
+
+document.addEventListener('click', (e) => {
+  const c = e.target.closest('[data-copy]'); if (c) return copyLink(c.dataset.copy);
+  const a = e.target.closest('[data-area]'); if (a) { AREA = a.dataset.area; LINE = ''; return render(); }
+  const l = e.target.closest('[data-line]'); if (l) { LINE = l.dataset.line; return render(); }
+});
+$('#q').addEventListener('input', render);
+$('#mfr').addEventListener('change', (e) => { MFR = e.target.value; render(); });
+
+fetch('/api/catalogos').then((r) => r.ok ? r.json() : Promise.reject())
+  .then((d) => {
+    const items = d.items || [];
+    renderHero(items.find((i) => i.kind === 'consolidado'));
+    PRODUCTS = items.filter((i) => i.kind === 'produto');
+    const mf = [...new Set(PRODUCTS.map((p) => p.manufacturer).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+    $('#mfr').innerHTML = '<option value="">Todos os fabricantes</option>' + mf.map((m) => `<option value="${esc(m)}">${esc(m)}</option>`).join('');
+    $('#mfr').hidden = mf.length < 2;
+    render();
+  })
+  .catch(() => { $('#list').innerHTML = '<div class="empty"><b>Não foi possível carregar os catálogos</b>Verifique sua conexão e recarregue a página.</div>'; });
+</script>
+</body>
+</html>

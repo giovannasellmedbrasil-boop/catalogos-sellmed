@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Administrar Catálogos · Sellmed Brasil</title>
+<link rel="icon" href="assets/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0C2F79; --teal:#1EA4A8; --green:#73CC6E;
+    --teal-soft:#EAF6F6; --navy-soft:#EDF1FA;
+    --bg:#FAFBFB; --surface:#FFFFFF; --border:#E2E8EC; --hover:#F2F6F8;
+    --ink:#1D2939; --text:#5B6772; --muted:#858683; --red:#B8372F; --red-bg:#FCEDEC;
+    --grad:linear-gradient(90deg,#0C2F79 0%,#1EA4A8 50%,#73CC6E 100%);
+    color-scheme:light;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);font-family:'Inter',Arial,sans-serif;color:var(--text);font-size:14px;}
+  h1,h2,h3{font-family:'Montserrat',Arial,sans-serif;}
+  .accent-bar{height:5px;background:var(--grad);}
+  header.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 32px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
+  header.topbar img{height:46px;width:auto;display:block;}
+  header.topbar h1{margin:0;font-size:19px;font-weight:800;color:var(--navy);}
+  header.topbar p{margin:2px 0 0;font-size:11.5px;color:var(--muted);font-weight:600;letter-spacing:.4px;text-transform:uppercase;}
+  header.topbar .spacer{flex:1;}
+  main{max-width:1100px;margin:0 auto;padding:24px 32px 70px;}
+  .hidden{display:none !important;}
+
+  .btn{border:none;border-radius:8px;padding:9px 15px;font-family:'Inter',sans-serif;font-weight:600;font-size:13.5px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-decoration:none;white-space:nowrap;}
+  .btn:disabled{opacity:.55;cursor:wait;}
+  .btn-primary{background:var(--navy);color:#fff;} .btn-primary:hover{filter:brightness(1.18);}
+  .btn-teal{background:var(--teal);color:#fff;} .btn-teal:hover{filter:brightness(1.08);}
+  .btn-ghost{background:var(--surface);color:var(--navy);border:1px solid var(--border);} .btn-ghost:hover{background:var(--hover);}
+  .btn-danger{background:var(--surface);color:var(--red);border:1px solid #F0CFCC;} .btn-danger:hover{background:var(--red-bg);}
+  .btn-sm{padding:5px 10px;font-size:12.5px;}
+
+  section.panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px 22px;margin-bottom:20px;}
+  section.panel h2{margin:0 0 14px;font-size:14px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:10px;}
+  section.panel h2::before{content:"";width:4px;height:15px;background:linear-gradient(var(--navy),var(--teal));border-radius:2px;}
+  section.panel h2 .right{margin-left:auto;display:flex;gap:8px;text-transform:none;letter-spacing:0;}
+
+  .login{max-width:400px;margin:60px auto;}
+  .login p{margin:-4px 0 16px;color:var(--muted);font-size:13.5px;}
+  input[type=text],input[type=password],input[type=search],input[type=number],textarea{width:100%;border:1px solid var(--border);border-radius:8px;padding:9px 11px;font-size:14px;font-family:'Inter',sans-serif;color:var(--ink);background:var(--surface);}
+  input:focus,textarea:focus{outline:2px solid var(--teal);outline-offset:1px;}
+  textarea{resize:vertical;min-height:70px;}
+  label.f{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;}
+  label.f input,label.f textarea{text-transform:none;letter-spacing:0;font-weight:400;}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px 16px;}
+  .form-grid .full{grid-column:1/-1;}
+  .hint{font-size:11.5px;font-weight:500;color:var(--muted);text-transform:none;letter-spacing:0;}
+
+  .drop{display:block;border:2px dashed #C9E6E7;background:var(--teal-soft);border-radius:12px;padding:20px;text-align:center;cursor:pointer;color:var(--navy);font-weight:600;}
+  .drop.over{border-color:var(--teal);background:#DDF0F0;}
+  .drop small{display:block;font-weight:500;color:var(--muted);margin-top:4px;}
+  .drop input{display:none;}
+  .prog{height:6px;background:#EDF1F4;border-radius:4px;overflow:hidden;margin-top:12px;}
+  .prog i{display:block;height:100%;width:0;background:var(--grad);transition:width .2s;}
+
+  .tbl-wrap{overflow-x:auto;}
+  table.t{width:100%;border-collapse:collapse;font-size:13.5px;}
+  table.t th{text-align:left;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;padding:9px 10px;border-bottom:1px solid var(--border);white-space:nowrap;}
+  table.t td{padding:10px;border-bottom:1px solid #EEF2F4;color:var(--ink);vertical-align:middle;}
+  table.t tr:hover td{background:#FAFCFD;}
+  table.t td.acts{white-space:nowrap;text-align:right;}
+  table.t .small{font-size:12px;color:var(--muted);}
+  table.t a{color:var(--navy);font-weight:600;text-decoration:none;} table.t a:hover{text-decoration:underline;}
+  .tag{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:5px;background:var(--navy-soft);color:var(--navy);white-space:nowrap;}
+  .empty{padding:30px;text-align:center;color:var(--muted);}
+
+  .overlay{position:fixed;inset:0;background:rgba(10,20,50,.45);display:none;align-items:center;justify-content:center;padding:20px;z-index:50;}
+  .overlay.open{display:flex;}
+  .modal{background:var(--surface);border-radius:14px;width:100%;max-width:640px;box-shadow:0 20px 60px rgba(10,20,50,.3);max-height:92vh;overflow:auto;}
+  .modal header{padding:16px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;}
+  .modal header h3{margin:0;font-size:16px;color:var(--navy);flex:1;}
+  .modal .body{padding:20px 22px;}
+  .modal footer{padding:14px 22px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;}
+  .x{background:none;border:none;font-size:22px;color:var(--muted);cursor:pointer;line-height:1;}
+  #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:11px 18px;border-radius:9px;font-size:13.5px;font-weight:500;z-index:200;display:none;box-shadow:0 8px 24px rgba(0,0,0,.2);}
+  #toast.err{background:var(--red);}
+  .thumb{width:40px;height:56px;object-fit:cover;object-position:top;border-radius:4px;border:1px solid var(--border);display:block;background:var(--teal-soft);}
+  table.t td.th{width:52px;padding-right:0;}
+  .cons{display:flex;gap:18px;align-items:center;flex-wrap:wrap;}
+  .cons img{width:92px;border-radius:6px;border:1px solid var(--border);display:block;}
+  .cons .txt{flex:1;min-width:220px;}
+  .cons b{display:block;font:700 16px 'Montserrat',sans-serif;color:var(--navy);}
+  .cons .small{font-size:12.5px;color:var(--muted);margin-top:4px;}
+  .cons .acts{display:flex;gap:8px;}
+  .prev{display:flex;gap:12px;align-items:center;margin-top:12px;font-size:12.5px;color:var(--muted);}
+  .prev img{width:64px;border-radius:4px;border:1px solid var(--border);}
+  @media (max-width:640px){ header.topbar,main{padding-left:16px;padding-right:16px;} .form-grid{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="accent-bar"></div>
+<header class="topbar">
+  <img src="assets/logo.svg" alt="Sellmed Brasil">
+  <div>
+    <h1>Administrar Catálogos</h1>
+    <p>Painel restrito · Sellmed Brasil</p>
+  </div>
+  <span class="spacer"></span>
+  <a class="btn btn-ghost" href="./" target="_blank">Ver página pública ↗</a>
+  <button class="btn btn-ghost hidden" id="logout">Sair</button>
+</header>
+
+<main>
+  <section class="panel login" id="loginBox">
+    <h2>Entrar</h2>
+    <p>Informe a senha de administrador para enviar, editar ou remover catálogos.</p>
+    <form id="loginForm">
+      <input type="password" id="pw" placeholder="Senha" autocomplete="current-password" required aria-label="Senha">
+      <div style="margin-top:14px;display:flex;justify-content:flex-end"><button class="btn btn-primary" id="loginBtn">Entrar</button></div>
+    </form>
+  </section>
+
+  <div class="hidden" id="app">
+    <section class="panel">
+      <h2>Catálogo consolidado</h2>
+      <div id="cons"></div>
+    </section>
+    <section class="panel">
+      <h2>Catálogos por produto <span class="right"><input type="search" id="q" placeholder="Filtrar…" aria-label="Filtrar catálogos" style="width:200px;padding:6px 10px;font-size:13px"><button class="btn btn-teal" id="addBtn">+ Novo produto</button></span></h2>
+      <div class="tbl-wrap">
+        <table class="t">
+          <thead><tr><th></th><th>Produto</th><th>Área · Linha</th><th>Fabricante</th><th>Atualizado</th><th></th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div class="overlay" id="overlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <header><h3 id="mTitle">Novo produto</h3><button class="x" id="mClose" aria-label="Fechar">×</button></header>
+    <form class="body" id="mForm">
+      <label class="drop" id="drop">
+        <input type="file" id="file" accept="application/pdf,.pdf">
+        <span id="dropText">Clique ou arraste o PDF aqui</span>
+        <small id="dropHint">Somente PDF, até 50 MB · a capa é criada automaticamente a partir da 1ª página</small>
+      </label>
+      <div class="prev hidden" id="prev"><img id="prevImg" alt="Prévia da capa"><span id="prevTxt"></span></div>
+      <div class="prog hidden" id="prog"><i></i></div>
+      <div class="form-grid" style="margin-top:16px">
+        <label class="f full">Nome <input type="text" id="fName" maxlength="120" required></label>
+        <label class="f full"><span>Descrição <span class="hint">(aparece na página pública)</span></span><textarea id="fDesc" maxlength="300"></textarea></label>
+        <label class="f only-prod">Área <input type="text" id="fArea" list="areas" maxlength="60" placeholder="Ex.: Endovascular"></label>
+        <label class="f only-prod"><span>Linha <span class="hint">(opcional)</span></span><input type="text" id="fLine" list="lines" maxlength="60" placeholder="Ex.: Linha Venosa"></label>
+        <label class="f only-prod"><span>Fabricante <span class="hint">(opcional)</span></span><input type="text" id="fMfr" list="mfrs" maxlength="60" placeholder="Ex.: LEPU Medical"></label>
+        <label class="f"><span>Versão <span class="hint">(opcional)</span></span><input type="text" id="fVer" maxlength="40" placeholder="Ex.: Nov/2026"></label>
+        <label class="f only-prod"><span>Ordem <span class="hint">(menor aparece primeiro)</span></span><input type="number" id="fOrd" step="1" placeholder="Automática"></label>
+      </div>
+      <datalist id="areas"></datalist><datalist id="lines"></datalist><datalist id="mfrs"></datalist>
+    </form>
+    <footer>
+      <button class="btn btn-ghost" id="mCancel" type="button">Cancelar</button>
+      <button class="btn btn-primary" id="mSave" type="button">Publicar</button>
+    </footer>
+  </div>
+</div>
+<div id="toast" role="status"></div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+const fmtDate = (iso) => iso ? new Date(iso).toLocaleDateString('pt-BR') : '';
+const fmtSize = (b) => !b ? '' : b < 1048576 ? Math.max(1, Math.round(b / 1024)) + ' KB' : (b / 1048576).toFixed(1).replace('.', ',') + ' MB';
+const PW_KEY = 'catalogos-admin-pw';
+
+let PW = sessionStorage.getItem(PW_KEY) || '';
+let ITEMS = [], EDIT = null, KIND = 'produto', FILE = null, COVER = null, PAGES = 0, RENDER_ID = 0;
+
+function toast(msg, type) { const t = $('#toast'); t.textContent = msg; t.className = type === 'err' ? 'err' : ''; t.style.display = 'block'; clearTimeout(toast._t); toast._t = setTimeout(() => t.style.display = 'none', 3200); }
+
+async function api(action, item) {
+  const r = await fetch('/api/admin/save', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: PW, action, item }) });
+  const d = await r.json().catch(() => ({}));
+  if (r.status === 401) { logout(); throw new Error(d.error || 'Senha incorreta.'); }
+  if (!r.ok) throw new Error(d.error || 'Erro ' + r.status);
+  ITEMS = d.items || [];
+  render();
+  return d;
+}
+
+function render() {
+  const c = ITEMS.find((i) => i.kind === 'consolidado');
+  $('#cons').innerHTML = c ? `<div class="cons">
+      ${c.coverUrl ? `<img src="${esc(c.coverUrl)}" alt="">` : ''}
+      <div class="txt"><b>${esc(c.name)}</b>
+        <div class="small">${[c.version && 'Versão ' + c.version, c.pages && c.pages + ' páginas', fmtSize(c.size), 'atualizado em ' + fmtDate(c.updatedAt)].filter(Boolean).map(esc).join(' · ')}</div></div>
+      <div class="acts"><a class="btn btn-ghost btn-sm" href="${esc(c.url)}" target="_blank" rel="noopener">Abrir</a>
+        <button class="btn btn-primary btn-sm" data-edit="${c.id}">Substituir / editar</button></div>
+    </div>` : `<div class="cons"><div class="txt small">Nenhum catálogo consolidado publicado.</div><button class="btn btn-teal" id="addCons">+ Enviar catálogo consolidado</button></div>`;
+
+  const products = ITEMS.filter((i) => i.kind === 'produto');
+  const q = norm($('#q').value.trim());
+  const rows = products.filter((p) => !q || norm([p.name, p.description, p.area, p.line, p.manufacturer].join(' ')).includes(q));
+  $('#rows').innerHTML = rows.length ? rows.map((p) => `
+    <tr>
+      <td class="th">${p.coverUrl ? `<img class="thumb" src="${esc(p.coverUrl)}" alt="" loading="lazy">` : '<span class="thumb"></span>'}</td>
+      <td><a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.name)}</a>${p.description ? `<div class="small">${esc(p.description)}</div>` : ''}</td>
+      <td><span class="tag">${esc(p.area)}</span>${p.line ? `<div class="small" style="margin-top:3px">${esc(p.line)}</div>` : ''}</td>
+      <td class="small">${esc(p.manufacturer) || '—'}</td>
+      <td class="small">${fmtDate(p.updatedAt)}</td>
+      <td class="acts"><button class="btn btn-ghost btn-sm" data-edit="${p.id}">Editar</button> <button class="btn btn-danger btn-sm" data-del="${p.id}">Remover</button></td>
+    </tr>`).join('') : `<tr><td colspan="6" class="empty">${products.length ? 'Nenhum catálogo encontrado.' : 'Nenhum catálogo publicado. Clique em “+ Novo produto”.'}</td></tr>`;
+  const opts = (key) => [...new Set(products.map((p) => p[key]).filter(Boolean))].map((v) => `<option value="${esc(v)}">`).join('');
+  $('#areas').innerHTML = opts('area'); $('#lines').innerHTML = opts('line'); $('#mfrs').innerHTML = opts('manufacturer');
+}
+
+function showApp(on) {
+  $('#loginBox').classList.toggle('hidden', on);
+  $('#app').classList.toggle('hidden', !on);
+  $('#logout').classList.toggle('hidden', !on);
+}
+function logout() { PW = ''; sessionStorage.removeItem(PW_KEY); showApp(false); }
+
+$('#loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  PW = $('#pw').value; $('#loginBtn').disabled = true;
+  try { await api('login'); sessionStorage.setItem(PW_KEY, PW); showApp(true); $('#pw').value = ''; }
+  catch (err) { toast(err.message, 'err'); }
+  finally { $('#loginBtn').disabled = false; }
+});
+$('#logout').onclick = logout;
+$('#q').addEventListener('input', render);
+
+// Pede ao servidor uma URL assinada e envia o arquivo direto ao Storage do Supabase
+async function upload(name, file, type, onProgress) {
+  const r = await fetch('/api/upload', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: PW, name, size: file.size, type }) });
+  const d = await r.json().catch(() => ({}));
+  if (r.status === 401) { logout(); throw new Error(d.error); }
+  if (!r.ok) throw new Error(d.error || 'Erro ' + r.status);
+  await new Promise((resolve, reject) => {
+    const x = new XMLHttpRequest();
+    x.open('PUT', d.uploadUrl);
+    x.setRequestHeader('Content-Type', type === 'capa' ? 'image/jpeg' : 'application/pdf');
+    if (onProgress) x.upload.onprogress = (e) => e.lengthComputable && onProgress(Math.round(e.loaded / e.total * 100));
+    x.onload = () => x.status < 300 ? resolve() : reject(new Error('Falha no envio do arquivo (' + x.status + ').'));
+    x.onerror = () => reject(new Error('Falha de conexão no envio do arquivo.'));
+    x.send(file);
+  });
+  return d.url;
+}
+
+// Capa automática: renderiza a 1ª página do PDF no navegador
+async function renderCover(file) {
+  const pdfjs = await import('./assets/vendor/pdf.min.mjs');
+  pdfjs.GlobalWorkerOptions.workerSrc = new URL('assets/vendor/pdf.worker.min.mjs', location.href).href;
+  const pdf = await pdfjs.getDocument({ data: await file.arrayBuffer() }).promise;
+  try {
+    const page = await pdf.getPage(1);
+    const vp = page.getViewport({ scale: 700 / page.getViewport({ scale: 1 }).width });
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(vp.width); canvas.height = Math.round(vp.height);
+    await page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise;
+    const blob = await new Promise((ok) => canvas.toBlob(ok, 'image/jpeg', 0.82));
+    return { blob, pages: pdf.numPages };
+  } finally { pdf.destroy(); }
+}
+
+// ---- modal ----
+async function setFile(f) {
+  if (!f) return;
+  if (f.type !== 'application/pdf' && !/\.pdf$/i.test(f.name)) return toast('Selecione um arquivo PDF.', 'err');
+  if (f.size > 50 * 1024 * 1024) return toast('O PDF passa de 50 MB.', 'err');
+  FILE = f; COVER = null; PAGES = 0;
+  const id = ++RENDER_ID;
+  $('#dropText').textContent = f.name;
+  $('#dropHint').textContent = fmtSize(f.size) + ' · clique para trocar';
+  if (!$('#fName').value.trim()) $('#fName').value = f.name.replace(/\.pdf$/i, '').replace(/[_]+/g, ' ').replace(/\s+/g, ' ').trim();
+  $('#prev').classList.remove('hidden'); $('#prevImg').hidden = true; $('#prevTxt').textContent = 'Gerando a capa…';
+  $('#mSave').disabled = true;
+  try {
+    const r = await renderCover(f);
+    if (id !== RENDER_ID) return;
+    COVER = r.blob; PAGES = r.pages;
+    $('#prevImg').src = URL.createObjectURL(r.blob); $('#prevImg').hidden = false;
+    $('#prevTxt').textContent = `Capa criada · ${r.pages} ${r.pages === 1 ? 'página' : 'páginas'}`;
+  } catch {
+    if (id !== RENDER_ID) return;
+    $('#prevTxt').textContent = 'Não foi possível gerar a capa. O catálogo será publicado sem imagem.';
+  }
+  $('#mSave').disabled = false;
+}
+function openModal(item, kind) {
+  EDIT = item || null; KIND = item?.kind || kind || 'produto'; FILE = null; COVER = null; PAGES = 0; RENDER_ID++;
+  const cons = KIND === 'consolidado';
+  $('#mForm').reset();
+  document.querySelectorAll('.only-prod').forEach((el) => el.classList.toggle('hidden', cons));
+  $('#mTitle').textContent = cons ? 'Catálogo consolidado' : item ? 'Editar produto' : 'Novo produto';
+  $('#mSave').textContent = item ? 'Salvar' : 'Publicar';
+  $('#dropText').textContent = item ? 'Substituir o PDF (opcional)' : 'Clique ou arraste o PDF aqui';
+  $('#dropHint').textContent = item ? 'Atual: ' + (item.fileName || 'arquivo.pdf') + ' · o link compartilhado continua o mesmo' : 'Somente PDF, até 50 MB · a capa é criada automaticamente a partir da 1ª página';
+  $('#fName').value = item?.name || (cons ? 'Catálogo Sellmed Brasil' : '');
+  $('#fDesc').value = item?.description || '';
+  $('#fArea').value = item?.area || '';
+  $('#fLine').value = item?.line || '';
+  $('#fMfr').value = item?.manufacturer || '';
+  $('#fVer').value = item?.version || '';
+  $('#fOrd').value = item ? item.sortOrder : '';
+  $('#prev').classList.add('hidden');
+  $('#prog').classList.add('hidden'); $('#prog i').style.width = '0';
+  $('#mSave').disabled = false;
+  $('#overlay').classList.add('open');
+}
+function closeModal() { if ($('#mSave').disabled && FILE && $('#prog').offsetParent) return; RENDER_ID++; $('#overlay').classList.remove('open'); }
+$('#addBtn').onclick = () => openModal();
+$('#mClose').onclick = $('#mCancel').onclick = closeModal;
+$('#file').addEventListener('change', (e) => setFile(e.target.files[0]));
+const drop = $('#drop');
+['dragenter', 'dragover'].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.add('over'); }));
+['dragleave', 'drop'].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.remove('over'); }));
+drop.addEventListener('drop', (e) => setFile(e.dataTransfer.files[0]));
+
+$('#mSave').onclick = async () => {
+  const cons = KIND === 'consolidado';
+  const item = { kind: KIND, name: $('#fName').value.trim(), description: $('#fDesc').value.trim(), version: $('#fVer').value.trim(),
+    area: cons ? '' : $('#fArea').value.trim(), line: cons ? '' : $('#fLine').value.trim(), manufacturer: cons ? '' : $('#fMfr').value.trim(), sortOrder: cons ? 0 : $('#fOrd').value };
+  if (!item.name) return toast('Informe o nome.', 'err');
+  if (!cons && !item.area) return toast('Informe a área.', 'err');
+  if (!EDIT && !FILE) return toast('Selecione o PDF.', 'err');
+  const btn = $('#mSave'); btn.disabled = true;
+  try {
+    if (FILE) {
+      $('#prog').classList.remove('hidden');
+      const url = await upload(item.name, FILE, 'pdf', (pct) => { $('#prog i').style.width = pct + '%'; });
+      const coverUrl = COVER ? await upload(item.name, COVER, 'capa') : null;
+      Object.assign(item, { url, coverUrl, fileName: FILE.name, size: FILE.size, pages: PAGES });
+    }
+    if (EDIT) { item.id = EDIT.id; await api('update', item); toast('Catálogo atualizado.'); }
+    else { await api('add', item); toast('Catálogo publicado.'); }
+    btn.disabled = false; closeModal();
+  } catch (err) {
+    toast(err.message || 'Falha no envio.', 'err');
+    btn.disabled = false;
+  }
+};
+
+document.addEventListener('click', async (e) => {
+  if (e.target.closest('#addCons')) return openModal(null, 'consolidado');
+  const ed = e.target.closest('[data-edit]'), dl = e.target.closest('[data-del]');
+  if (ed) openModal(ITEMS.find((p) => p.id === ed.dataset.edit));
+  if (dl) {
+    const p = ITEMS.find((x) => x.id === dl.dataset.del);
+    if (!confirm(`Remover “${p.name}”? O PDF será apagado e sairá da página pública.`)) return;
+    dl.disabled = true;
+    try { await api('delete', { id: p.id }); toast('Catálogo removido.'); }
+    catch (err) { toast(err.message, 'err'); dl.disabled = false; }
+  }
+});
+
+if (PW) api('login').then(() => showApp(true)).catch(() => logout());
+</script>
+</body>
+</html>

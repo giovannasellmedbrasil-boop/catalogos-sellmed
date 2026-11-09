@@ -1,0 +1,4 @@
+{
+  "cleanUrls": false,
+  "rewrites": [{ "source": "/c/:slug", "destination": "/api/arquivo?slug=:slug" }]
+}
