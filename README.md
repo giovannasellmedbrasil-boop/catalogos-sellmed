@@ -9,9 +9,8 @@ Plataforma com o catálogo consolidado e o catálogo individual de cada produto,
 - **Página pública:** https://catalogos-sellmed.vercel.app
 - **Painel:** https://catalogos-sellmed.vercel.app/admin.html
 
-**Status:** publicada na Vercel (time `sellmed-brasil`, projeto `catalogos-sellmed`). Banco: Supabase
-`jlfzuibanroexvnwyeti`, com `schema.sql` aplicado. Falta a variável `SUPABASE_SECRET_KEY` na Vercel:
-sem ela o envio de PDFs não funciona e o conteúdo inicial (`npm run seed`) não foi enviado.
+**Status:** publicada e funcionando (Vercel `catalogos-sellmed` + Supabase `jlfzuibanroexvnwyeti`).
+O envio de PDF pelo painel foi testado em produção em 09/11/2026.
 
 ## Como usar o painel
 1. Entre com a senha de administrador.
