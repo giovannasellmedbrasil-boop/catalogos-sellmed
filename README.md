@@ -42,6 +42,9 @@ git add catalogos && git commit -m "Catálogos: …" && git push
 npx vercel@latest deploy --prod --yes --scope sellmed-brasil
 DATABASE_URL=… SUPABASE_URL=… SUPABASE_SECRET_KEY=… node scripts/publicar.mjs banco   # tabela + Storage
 ```
+Produto sem PDF: no `catalogos.json` fica com `"arquivo": null`. No site aparece como “Catálogo em breve”.
+Para publicar o catálogo, use o painel: **Editar → enviar o PDF**. Depois, `importar` traz o arquivo para cá.
+
 Para remover um catálogo de vez, tire-o do `catalogos.json` e da pasta, além de remover no painel.
 Se não fizer isso, o próximo `banco` o recoloca no site.
 

@@ -203,7 +203,7 @@ function render() {
   $('#rows').innerHTML = rows.length ? rows.map((p) => `
     <tr>
       <td class="th">${p.coverUrl ? `<img class="thumb" src="${esc(p.coverUrl)}" alt="" loading="lazy">` : '<span class="thumb"></span>'}</td>
-      <td><a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.name)}</a>${p.description ? `<div class="small">${esc(p.description)}</div>` : ''}</td>
+      <td>${p.url ? `<a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.name)}</a>` : `<b style="color:var(--navy)">${esc(p.name)}</b> <span class="tag" style="background:#FFF4E0;color:#9A6200">Sem PDF</span>`}${p.description ? `<div class="small">${esc(p.description)}</div>` : ''}</td>
       <td><span class="tag">${esc(p.area)}</span>${p.line ? `<div class="small" style="margin-top:3px">${esc(p.line)}</div>` : ''}</td>
       <td class="small">${esc(p.manufacturer) || '—'}</td>
       <td class="small">${fmtDate(p.updatedAt)}</td>
@@ -301,7 +301,9 @@ function openModal(item, kind) {
   $('#mTitle').textContent = cons ? 'Catálogo consolidado' : item ? 'Editar produto' : 'Novo produto';
   $('#mSave').textContent = item ? 'Salvar' : 'Publicar';
   $('#dropText').textContent = item ? 'Substituir o PDF (opcional)' : 'Clique ou arraste o PDF aqui';
-  $('#dropHint').textContent = item ? 'Atual: ' + (item.fileName || 'arquivo.pdf') + ' · o link compartilhado continua o mesmo' : 'Somente PDF, até 50 MB · a capa é criada automaticamente a partir da 1ª página';
+  $('#dropText').textContent = item && !item.url ? 'Enviar o PDF deste produto' : $('#dropText').textContent;
+  $('#dropHint').textContent = item && !item.url ? 'Ainda sem catálogo · ao enviar, ele sai de “em breve” e o link /c/ passa a abrir o PDF'
+    : item ? 'Atual: ' + (item.fileName || 'arquivo.pdf') + ' · o link compartilhado continua o mesmo' : 'Somente PDF, até 50 MB · a capa é criada automaticamente a partir da 1ª página';
   $('#fName').value = item?.name || (cons ? 'Catálogo Sellmed Brasil' : '');
   $('#fDesc').value = item?.description || '';
   $('#fArea').value = item?.area || '';
@@ -329,7 +331,8 @@ $('#mSave').onclick = async () => {
     area: cons ? '' : $('#fArea').value.trim(), line: cons ? '' : $('#fLine').value.trim(), manufacturer: cons ? '' : $('#fMfr').value.trim(), sortOrder: cons ? 0 : $('#fOrd').value };
   if (!item.name) return toast('Informe o nome.', 'err');
   if (!cons && !item.area) return toast('Informe a área.', 'err');
-  if (!EDIT && !FILE) return toast('Selecione o PDF.', 'err');
+  if (!EDIT && !FILE && cons) return toast('Selecione o PDF.', 'err');
+  if (!EDIT && !FILE && !confirm('Publicar sem PDF? O produto aparece no site como “Catálogo em breve” até você enviar o arquivo.')) return;
   const btn = $('#mSave'); btn.disabled = true;
   try {
     if (FILE) {

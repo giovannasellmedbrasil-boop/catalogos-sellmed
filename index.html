@@ -79,6 +79,10 @@
   .thumb img{display:block;width:100%;height:100%;object-fit:cover;object-position:top;}
   .thumb .none{height:100%;display:flex;align-items:center;justify-content:center;}
   .thumb .none img{width:56%;opacity:.8;}
+  .thumb.soon{background:linear-gradient(160deg,#F3F8FA 0%,var(--teal-soft) 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;}
+  .thumb.soon img{width:42%;height:auto;opacity:.55;}
+  .thumb.soon span{font:700 11px 'Montserrat',sans-serif;letter-spacing:.8px;text-transform:uppercase;color:var(--teal);background:#fff;border:1px solid #C9E6E7;border-radius:999px;padding:4px 10px;}
+  .btn-soon{background:var(--hover);color:var(--muted);flex:1;padding:8px 10px;font-size:13px;cursor:default;}
   .info{padding:13px 14px 14px;display:flex;flex-direction:column;flex:1;}
   .mfr{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;}
   .info h5{margin:4px 0 0;font:700 15.5px/1.3 'Montserrat',sans-serif;color:var(--navy);}
@@ -108,6 +112,7 @@
     .cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
     .info{padding:10px;} .info h5{font-size:14px;} .btn-primary{font-size:12.5px;padding:8px 6px;}
     .icon{width:34px;height:34px;}
+    .info .acts a.icon{display:none;} /* no celular fica Ver + Copiar link */
     footer.foot{padding:18px;}
   }
 </style>
@@ -214,6 +219,16 @@ const chip = (val, cur, label, n, attr) => `<button class="chip ${cur === val ? 
 
 function card(p, q) {
   const url = `/c/${esc(p.slug)}`;
+  if (!p.url) return `
+    <article class="card">
+      <div class="thumb soon"><img src="assets/logo.svg" alt=""><span>Catálogo em breve</span></div>
+      <div class="info">
+        ${p.manufacturer ? `<span class="mfr">${highlight(p.manufacturer, q)}</span>` : ''}
+        <h5>${highlight(p.name, q)}</h5>
+        ${p.description ? `<p>${highlight(p.description, q)}</p>` : ''}
+        <div class="acts"><span class="btn btn-soon" aria-disabled="true">Em breve</span></div>
+      </div>
+    </article>`;
   return `
     <article class="card">
       <a class="thumb" href="${url}" target="_blank" rel="noopener" aria-label="Abrir catálogo ${esc(p.name)}">${p.coverUrl

@@ -9,7 +9,7 @@ create table if not exists public.catalogos (
   line         text not null default '' check (char_length(line) <= 60),
   manufacturer text not null default '' check (char_length(manufacturer) <= 60),
   version      text not null default '' check (char_length(version) <= 40),
-  url          text not null,
+  url          text,            -- vazio = produto listado, catálogo ainda não enviado
   cover_url    text,
   file_name    text not null default '',
   size         bigint not null default 0,
@@ -18,6 +18,9 @@ create table if not exists public.catalogos (
   created_at   timestamptz not null default now(),
   updated_at   timestamptz not null default now()
 );
+
+-- Bancos criados antes de 09/11/2026: produto pode existir sem PDF
+alter table public.catalogos alter column url drop not null;
 
 -- Só pode existir um catálogo consolidado
 create unique index if not exists catalogos_um_consolidado on public.catalogos (kind) where kind = 'consolidado';

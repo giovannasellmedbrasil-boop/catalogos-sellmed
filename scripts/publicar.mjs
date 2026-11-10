@@ -31,9 +31,10 @@ async function importar(base, only) {
   base = base.replace(/\/$/, '');
   const { items } = await (await fetch(`${base}/api/catalogos`)).json();
   const list = load();
-  const picked = items.filter((i) => (only ? only.includes(i.slug) : !i.url.startsWith('/catalogos/')));
+  const picked = items.filter((i) => (only ? only.includes(i.slug) : i.url && !i.url.startsWith('/catalogos/')));
   if (only) for (const s of only) if (!picked.find((i) => i.slug === s)) throw new Error(`slug não encontrado: ${s}`);
   for (const it of picked) {
+    if (!it.url) throw new Error(`${it.slug} ainda não tem PDF no site`);
     const abs = (u) => (u.startsWith('/') ? base + u : u);
     const pdf = await download(abs(it.url));
     // nome com hash: um PDF substituído ganha URL nova e ninguém recebe a versão antiga do cache
@@ -74,9 +75,10 @@ async function banco() {
   const c = new pg.Client({ connectionString: process.env.DATABASE_URL, ssl: process.env.DATABASE_SSL === 'off' ? false : { rejectUnauthorized: false } });
   await c.connect();
   for (const it of load()) {
-    const url = `/catalogos/${it.arquivo}`;
+    // arquivo vazio = produto listado sem catálogo ("em breve")
+    const url = it.arquivo ? `/catalogos/${it.arquivo}` : null;
     const coverUrl = it.capa ? `/catalogos/${it.capa}` : null;
-    const size = readFileSync(join(dir, it.arquivo)).length;
+    const size = it.arquivo ? readFileSync(join(dir, it.arquivo)).length : 0;
     for (const f of [it.arquivo, it.capa].filter(Boolean)) console.log(' ', f, '→', await espelhar(f));
     const { rows } = await c.query('select url from public.catalogos where slug = $1', [it.slug]);
     if (!rows.length) {
@@ -85,7 +87,7 @@ async function banco() {
          values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)`,
         [it.kind, it.slug, it.name, it.description, it.area, it.line, it.manufacturer, it.version, url, coverUrl, it.fileName, size, it.pages, it.sortOrder]);
       console.log('inserido', it.slug);
-    } else if (rows[0].url !== url) {
+    } else if (url && rows[0].url !== url) {
       await c.query('update public.catalogos set url=$2, cover_url=$3, file_name=$4, size=$5, pages=$6, updated_at=now() where slug=$1',
         [it.slug, url, coverUrl, it.fileName, size, it.pages]);
       console.log('arquivo atualizado', it.slug);

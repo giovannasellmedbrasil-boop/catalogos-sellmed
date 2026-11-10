@@ -36,9 +36,10 @@ export default async function handler(req, res) {
       const kind = item.kind === 'consolidado' ? 'consolidado' : 'produto';
       const err = invalid(kind);
       if (err) return res.status(400).json({ error: err });
-      if (!file || !isPdfFile(file.url)) return res.status(400).json({ error: 'Arquivo inválido.' });
+      // produto pode ser cadastrado sem PDF (aparece como "catálogo em breve"); o consolidado precisa do arquivo
+      if (file ? !isPdfFile(file.url) : kind === 'consolidado') return res.status(400).json({ error: file ? 'Arquivo inválido.' : 'Selecione o PDF.' });
       if (kind === 'consolidado' && await hasConsolidated()) return res.status(409).json({ error: 'Já existe um catálogo consolidado. Use Substituir.' });
-      await insertItem({ ...fields, ...file, kind });
+      await insertItem({ ...fields, url: null, coverUrl: null, fileName: '', size: 0, pages: 0, ...file, kind });
     } else if (action === 'update' || action === 'delete') {
       const old = await getItem(item.id);
       if (!old) return res.status(404).json({ error: 'Catálogo não encontrado.' });
